@@ -29,7 +29,6 @@ async function onButtonClick() {
   let options = {};
   if (document.querySelector('#allAdvertisements').checked) {
     options.acceptAllAdvertisements = true;
-    options.keepRepeatedDevices = true;
   } else {
     options.filters = filters;
   }
