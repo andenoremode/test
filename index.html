@@ -1,8 +1,14 @@
 <html>
   <head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script>
 
+var myChart = NULL;
+var measurement_count = 0;
+
 function log(text) {
+  logger = document.querySelector('#logview');
+  logger.innerHTML += text + '<br />';
   console.log(text);
 
 }
@@ -21,12 +27,13 @@ async function onButtonClick() {
   }
 
   let options = {};
-  /*if (document.querySelector('#allAdvertisements').checked) {
+  if (document.querySelector('#allAdvertisements').checked) {
     options.acceptAllAdvertisements = true;
   } else {
     options.filters = filters;
-  }*/
-  options.acceptAllAdvertisements = true;
+  }
+  //options.acceptAllAdvertisements = true;
+  
 
   try {
     log('Requesting Bluetooth Scan with options: ' + JSON.stringify(options));
@@ -51,6 +58,25 @@ async function onButtonClick() {
       event.serviceData.forEach((valueDataView, key) => {
         logDataView('Service', key, valueDataView);
       });
+
+      let modeData = event.manufacturerData.get(0xde10);
+      if (modeData.byteLength != 21) {
+        // Isn’t an mode device.
+        return;
+      }
+
+      let seqNo = modeData.getUint8(0);
+      let snYear = modeData.getUint8(1);
+      let snMonth = modeData.getUint8(2);
+      let snNumber = modeData.getUint32(3);
+      let battery0 = modeData.getFloat(7);
+      let battery1 = modeData.getFloat(11);
+      let avgBioz = modeData.getUint16(15);
+      let avgCCA = modeData.getUint16(17);
+      let worstSfdr = modeData.getInt16(19);
+
+      newModeDevice(seqNo, snYear, snMonth, snNumber, battery0, battery1, avgBioz, avgCCA, worstSfdr);
+
     });
 
     setTimeout(stopScan, 10000);
@@ -64,8 +90,24 @@ async function onButtonClick() {
   }
 }
 
+function newModeDevice(seqNo, snYear, snMonth, snNumber, battery0, battery1, avgBioz, avgCCA, worstSfdr) {
+  
+  addChartData(measurement_count, battery0);
+
+  measurement_count += 1;
+
+  log("Got data from " + snNumber);
+}
+
+function addChartData(idx, data) {
+    myChart.data.labels.push(idx);
+    myChart.data.datasets.forEach((dataset) => {
+        dataset.data.push(data);
+    });
+    myChart.update();
+  }
+
 /* Utils */
-console.log("Heisann");
 const logDataView = (labelOfDataSource, key, valueDataView) => {
   const hexString = [...new Uint8Array(valueDataView.buffer)].map(b => {
     return b.toString(16).padStart(2, '0');
@@ -76,6 +118,43 @@ const logDataView = (labelOfDataSource, key, valueDataView) => {
       '\n    (Hex) ' + hexString +
       '\n    (ASCII) ' + asciiString);
 };
+
+window.onload =  function() {
+  document.querySelector('form').addEventListener('submit', function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+    
+          onButtonClick();
+      });
+
+
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var idx = 0;
+
+  myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: [],
+          datasets: [{
+              label: 'Battery 1',
+              data: [],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          maintainAspectRatio: true,
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
+      }
+  });
+
+};
+
     </script>
   </head>
 
@@ -87,17 +166,13 @@ const logDataView = (labelOfDataSource, key, valueDataView) => {
       <input id="namePrefix" type="text" size=17 placeholder="Device Name Prefix">
       <button>Scan for Bluetooth Advertisements</button>
     </form>
-        
-    <script>
-      document.querySelector('form').addEventListener('submit', function(event) {
-        event.stopPropagation();
-        event.preventDefault();
-    
-          onButtonClick();
-      });
-    </script>
 
-    <div>Heisann</div>
+    <canvas id="myChart" style="min-height: 250px;"></canvas>
+
+    <div id="logview">
+
+    </div>
+      
   </body>
 
 </html>
