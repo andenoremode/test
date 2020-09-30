@@ -46,18 +46,18 @@ async function onButtonClick() {
     log(' filters: ' + JSON.stringify(scan.filters));
 
     navigator.bluetooth.addEventListener('advertisementreceived', event => {
-      log('Advertisement received.');
-      log('  Device Name: ' + event.device.name);
-      log('  Device ID: ' + event.device.id);
-      log('  RSSI: ' + event.rssi);
-      log('  TX Power: ' + event.txPower);
-      log('  UUIDs: ' + event.uuids);
-      event.manufacturerData.forEach((valueDataView, key) => {
-        logDataView('Manufacturer', key, valueDataView);
-      });
-      event.serviceData.forEach((valueDataView, key) => {
-        logDataView('Service', key, valueDataView);
-      });
+      //log('Advertisement received.');
+      //log('  Device Name: ' + event.device.name);
+      //log('  Device ID: ' + event.device.id);
+      //log('  RSSI: ' + event.rssi);
+      //log('  TX Power: ' + event.txPower);
+      //log('  UUIDs: ' + event.uuids);
+      //event.manufacturerData.forEach((valueDataView, key) => {
+      //  logDataView('Manufacturer', key, valueDataView);
+      //});
+      //event.serviceData.forEach((valueDataView, key) => {
+      //  logDataView('Service', key, valueDataView);
+      //});
 
       let modeData = event.manufacturerData.get(0xde10);
       if (modeData.byteLength != 21) {
@@ -91,12 +91,11 @@ async function onButtonClick() {
 }
 
 function newModeDevice(seqNo, snYear, snMonth, snNumber, battery0, battery1, avgBioz, avgCCA, worstSfdr) {
-  
+  log("Mode device: " + snNumber);
+
   addChartData(measurement_count, battery0);
 
   measurement_count += 1;
-
-  log("Got data from " + snNumber);
 }
 
 function addChartData(idx, data) {
