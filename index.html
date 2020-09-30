@@ -29,6 +29,7 @@ async function onButtonClick() {
   let options = {};
   if (document.querySelector('#allAdvertisements').checked) {
     options.acceptAllAdvertisements = true;
+    options.keepRepeatedDevices = true;
   } else {
     options.filters = filters;
   }
@@ -60,6 +61,7 @@ async function onButtonClick() {
       //});
 
       let modeData = event.manufacturerData.get(0xde10);
+      log(modeData.byteLength);
       if (modeData.byteLength != 21) {
         // Isn’t an mode device.
         return;
