@@ -60,21 +60,31 @@ async function onButtonClick() {
       //});
 
       let modeData = event.manufacturerData.get(0xde10);
-      log(modeData.byteLength);
       if (modeData.byteLength != 21) {
         // Isn’t an mode device.
         return;
       }
 
+      log(modeData);
+
       let seqNo = modeData.getUint8(0);
+      log("seqNo " + seqNo);
       let snYear = modeData.getUint8(1);
+      log("snYear " + snYear);
       let snMonth = modeData.getUint8(2);
+      log("snMonth " + snMonth);
       let snNumber = modeData.getUint32(3);
+      log("snNumber " + snNumber);
       let battery0 = modeData.getFloat(7);
+      log("battery0 " + battery0);
       let battery1 = modeData.getFloat(11);
+      log("battery1 " + battery1);
       let avgBioz = modeData.getUint16(15);
+      log("avgBioz " + avgBioz);
       let avgCCA = modeData.getUint16(17);
+      log("avgCCA " + avgCCA);
       let worstSfdr = modeData.getInt16(19);
+      log("worstSfdr " + worstSfdr);
 
       newModeDevice(seqNo, snYear, snMonth, snNumber, battery0, battery1, avgBioz, avgCCA, worstSfdr);
 
