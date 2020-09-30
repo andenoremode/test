@@ -26,6 +26,8 @@ async function onButtonClick() {
     filters.push({namePrefix: filterNamePrefix});
   }
 
+  filters.push({manufacturerData: {0xde10 : {dataPrefix: new Uint8Array([])}}});
+
   let options = {};
   if (document.querySelector('#allAdvertisements').checked) {
     options.acceptAllAdvertisements = true;
@@ -65,13 +67,7 @@ async function onButtonClick() {
         return;
       }
 
-
-
-      log("v2");
-
-      event.manufacturerData.forEach((valueDataView, key) => {
-        logDataView('Manufacturer', key, valueDataView);
-      });
+      log("v3");
 
       let seqNo = modeData.getUint8(0, true);
       log("seqNo " + seqNo);
@@ -95,13 +91,6 @@ async function onButtonClick() {
       newModeDevice(seqNo, snYear, snMonth, snNumber, battery0, battery1, avgBioz, avgCCA, worstSfdr);
 
     });
-
-    setTimeout(stopScan, 10000);
-    function stopScan() {
-      log('Stopping scan...');
-      scan.stop();
-      log('Stopped.  scan.active = ' + scan.active);
-    }
   } catch(error)  {
     log('Argh! ' + error);
   }
