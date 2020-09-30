@@ -65,7 +65,13 @@ async function onButtonClick() {
         return;
       }
 
+
+
       log("v1");
+
+      event.manufacturerData.forEach((valueDataView, key) => {
+        logDataView('Manufacturer', key, valueDataView);
+      });
 
       let seqNo = modeData.getUint8(0);
       log("seqNo " + seqNo);
