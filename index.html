@@ -67,29 +67,29 @@ async function onButtonClick() {
 
 
 
-      log("v1");
+      log("v2");
 
       event.manufacturerData.forEach((valueDataView, key) => {
         logDataView('Manufacturer', key, valueDataView);
       });
 
-      let seqNo = modeData.getUint8(0);
+      let seqNo = modeData.getUint8(0, true);
       log("seqNo " + seqNo);
-      let snYear = modeData.getUint8(1);
+      let snYear = modeData.getUint8(1, true);
       log("snYear " + snYear);
-      let snMonth = modeData.getUint8(2);
+      let snMonth = modeData.getUint8(2, true);
       log("snMonth " + snMonth);
-      let snNumber = modeData.getUint32(3);
+      let snNumber = modeData.getUint32(3, true);
       log("snNumber " + snNumber);
-      let battery0 = modeData.getFloat32(7);
+      let battery0 = modeData.getFloat32(7, true);
       log("battery0 " + battery0);
-      let battery1 = modeData.getFloat32(11);
+      let battery1 = modeData.getFloat32(11, true);
       log("battery1 " + battery1);
-      let avgBioz = modeData.getUint16(15);
+      let avgBioz = modeData.getUint16(15, true);
       log("avgBioz " + avgBioz);
-      let avgCCA = modeData.getUint16(17);
+      let avgCCA = modeData.getUint16(17, true);
       log("avgCCA " + avgCCA);
-      let worstSfdr = modeData.getInt16(19);
+      let worstSfdr = modeData.getInt16(19, true);
       log("worstSfdr " + worstSfdr);
 
       newModeDevice(seqNo, snYear, snMonth, snNumber, battery0, battery1, avgBioz, avgCCA, worstSfdr);
