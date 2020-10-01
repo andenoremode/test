@@ -80,7 +80,7 @@ function newModeDevice(seqNo, snYear, snMonth, snNumber, battery0, battery1, avg
   serialNumberString =  (snYear + 10).toString(36).toUpperCase();
   serialNumberString += (snMonth + 10).toString(36).toUpperCase();
   serialNumberString += snNumber.toString(36).padStart(6, '0').toUpperCase();
-  log("Mode device: " + (snYear + 10).toString(36) + (snMonth + 10).toString(36), snNumber.toString(36));
+  log("Mode device: " + serialNumberString);
 
   addChartData(measurement_count, battery0);
 
@@ -109,7 +109,7 @@ const logDataView = (labelOfDataSource, key, valueDataView) => {
 
 window.onload =  function() {
 
-  log("v4");
+  log("v5");
 
   document.querySelector('form').addEventListener('submit', function(event) {
         event.stopPropagation();
