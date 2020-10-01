@@ -16,27 +16,9 @@ function log(text) {
 async function onButtonClick() {
   let filters = [];
 
-  let filterName = document.querySelector('#name').value;
-  if (filterName) {
-    filters.push({name: filterName});
-  }
-
-  let filterNamePrefix = document.querySelector('#namePrefix').value;
-  if (filterNamePrefix) {
-    filters.push({namePrefix: filterNamePrefix});
-  }
-
-  filters.push({manufacturerData: {0xde10 : {dataPrefix: new Uint8Array([0x01])}}});
-
   let options = {};
-  if (document.querySelector('#allAdvertisements').checked) {
-    options.acceptAllAdvertisements = true;
-  } else {
-    options.filters = filters;
-  }
-  //options.acceptAllAdvertisements = true;
+  options.acceptAllAdvertisements = true;
   
-
   try {
     log('Requesting Bluetooth Scan with options: ' + JSON.stringify(options));
     const scan = await navigator.bluetooth.requestLEScan(options);
@@ -67,26 +49,24 @@ async function onButtonClick() {
         return;
       }
 
-      log("v3");
-
       let seqNo = modeData.getUint8(0, true);
-      log("seqNo " + seqNo);
+      //log("seqNo " + seqNo);
       let snYear = modeData.getUint8(1, true);
-      log("snYear " + snYear);
+      //log("snYear " + snYear);
       let snMonth = modeData.getUint8(2, true);
-      log("snMonth " + snMonth);
+      //log("snMonth " + snMonth);
       let snNumber = modeData.getUint32(3, true);
-      log("snNumber " + snNumber);
+      //log("snNumber " + snNumber);
       let battery0 = modeData.getFloat32(7, true);
-      log("battery0 " + battery0);
+      //log("battery0 " + battery0);
       let battery1 = modeData.getFloat32(11, true);
-      log("battery1 " + battery1);
+      //log("battery1 " + battery1);
       let avgBioz = modeData.getUint16(15, true);
-      log("avgBioz " + avgBioz);
+      //log("avgBioz " + avgBioz);
       let avgCCA = modeData.getUint16(17, true);
-      log("avgCCA " + avgCCA);
+      //log("avgCCA " + avgCCA);
       let worstSfdr = modeData.getInt16(19, true);
-      log("worstSfdr " + worstSfdr);
+      //log("worstSfdr " + worstSfdr);
 
       newModeDevice(seqNo, snYear, snMonth, snNumber, battery0, battery1, avgBioz, avgCCA, worstSfdr);
 
@@ -97,7 +77,7 @@ async function onButtonClick() {
 }
 
 function newModeDevice(seqNo, snYear, snMonth, snNumber, battery0, battery1, avgBioz, avgCCA, worstSfdr) {
-  log("Mode device: " + snNumber);
+  log("Mode device: " + (snYear + 10).toString(36) + (snMonth + 10).toString(36), snNumber.toString(36));
 
   addChartData(measurement_count, battery0);
 
@@ -125,12 +105,17 @@ const logDataView = (labelOfDataSource, key, valueDataView) => {
 };
 
 window.onload =  function() {
+
+  log("v4");
+
   document.querySelector('form').addEventListener('submit', function(event) {
         event.stopPropagation();
         event.preventDefault();
     
           onButtonClick();
       });
+
+  await onButtonClick();
 
 
   var ctx = document.getElementById('myChart').getContext('2d');
