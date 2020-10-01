@@ -80,7 +80,7 @@ function newModeDevice(seqNo, snYear, snMonth, snNumber, battery0, battery1, avg
   serialNumberString =  (snYear + 10).toString(36).toUpperCase();
   serialNumberString += (snMonth + 10).toString(36).toUpperCase();
   serialNumberString += snNumber.toString(36).padStart(6, '0').toUpperCase();
-  log("Mode device: " + serialNumberString);
+  log("Mode device: " + serialNumberString + " battery = " + battery0);
 
   addChartData(measurement_count, battery0);
 
