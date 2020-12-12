@@ -63,7 +63,7 @@ async function onButtonClick() {
       let battery1 = modeData.getFloat32(11, true);
       //log("battery1 " + battery1);
       let avgBiozQ88 = modeData.getUint16(15, true);
-      let avgBioz = avgBioz / 256.0;
+      let avgBioz = avgBiozQ88 / 256.0;
 
       //log("avgBioz " + avgBioz);
       let avgCCAQ12_4 = modeData.getUint16(17, true);
@@ -71,7 +71,7 @@ async function onButtonClick() {
 
       //log("avgCCA " + avgCCA);
       let worstSfdrQ88 = modeData.getInt16(19, true);
-      let worstSfdr    = worstSfdr / 256.0;
+      let worstSfdr    = worstSfdrQ88 / 256.0;
       //log("worstSfdr " + worstSfdr);
 
       newModeDevice(seqNo, snYear, snMonth, snNumber, battery0, battery1, avgBioz, avgCCA, worstSfdr);
@@ -127,7 +127,7 @@ const logDataView = (labelOfDataSource, key, valueDataView) => {
 
 window.onload =  function() {
 
-  log("v7");
+  log("v8");
 
   document.querySelector('form').addEventListener('submit', function(event) {
         event.stopPropagation();
