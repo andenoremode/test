@@ -5,6 +5,7 @@
 
 var myChart = null;
 var measurement_count = 0;
+var prev_seqno = 0;
 
 function log(text) {
   logger = document.querySelector('#logview');
@@ -77,14 +78,26 @@ async function onButtonClick() {
 }
 
 function newModeDevice(seqNo, snYear, snMonth, snNumber, battery0, battery1, avgBioz, avgCCA, worstSfdr) {
+  if (prev_seqno == seqNo) {
+    return;
+  }
+
+  
   serialNumberString =  (snYear + 10).toString(36).toUpperCase();
   serialNumberString += (snMonth + 10).toString(36).toUpperCase();
   serialNumberString += snNumber.toString(36).padStart(6, '0').toUpperCase();
-  log("Mode device: " + serialNumberString + " battery = " + battery0);
+  textString = "Mode device: " + serialNumberString;
+  textString += " battery = " + battery0;
+  textString += " battery1 = " + battery1;
+  textString += " avgBioz = " + avgBioz;
+  textString += " avgCCA = " + avgCCA;
+  textString += " worstSfdr = " + worstSfdr;
+  log(textString);
 
   addChartData(measurement_count, battery0);
 
   measurement_count += 1;
+  prev_seqno = seqNo;
 }
 
 function addChartData(idx, data) {
@@ -109,7 +122,7 @@ const logDataView = (labelOfDataSource, key, valueDataView) => {
 
 window.onload =  function() {
 
-  log("v5");
+  log("v6");
 
   document.querySelector('form').addEventListener('submit', function(event) {
         event.stopPropagation();
