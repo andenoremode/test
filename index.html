@@ -62,11 +62,16 @@ async function onButtonClick() {
       //log("battery0 " + battery0);
       let battery1 = modeData.getFloat32(11, true);
       //log("battery1 " + battery1);
-      let avgBioz = modeData.getUint16(15, true);
+      let avgBiozQ88 = modeData.getUint16(15, true);
+      let avgBioz = avgBioz / 256.0;
+
       //log("avgBioz " + avgBioz);
-      let avgCCA = modeData.getUint16(17, true);
+      let avgCCAQ12_4 = modeData.getUint16(17, true);
+      let avgCCA      = avgCCAQ12_4 / 16.0;
+
       //log("avgCCA " + avgCCA);
-      let worstSfdr = modeData.getInt16(19, true);
+      let worstSfdrQ88 = modeData.getInt16(19, true);
+      let worstSfdr    = worstSfdr / 256.0;
       //log("worstSfdr " + worstSfdr);
 
       newModeDevice(seqNo, snYear, snMonth, snNumber, battery0, battery1, avgBioz, avgCCA, worstSfdr);
