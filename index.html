@@ -91,15 +91,15 @@ function newModeDevice(seqNo, snYear, snMonth, snNumber, battery0, battery1, avg
   serialNumberString =  (snYear + 10).toString(36).toUpperCase();
   serialNumberString += (snMonth + 10).toString(36).toUpperCase();
   serialNumberString += snNumber.toString(36).padStart(6, '0').toUpperCase();
-  textString = "Mode device: " + serialNumberString;
-  textString += " battery = " + battery0;
-  textString += " battery1 = " + battery1;
-  textString += " avgBioz = " + avgBioz;
-  textString += " avgCCA = " + avgCCA;
-  textString += " worstSfdr = " + worstSfdr;
+  textString = serialNumberString;
+  textString += " b0 = " + battery0.toFixed(2);
+  textString += " b1 = " + battery1.toFixed(2);
+  textString += " bz = " + avgBioz.toFixed(1);
+  textString += " cca = " + avgCCA.toFixed(1);
+  textString += " sfdr = " + worstSfdr.toFixed(1);
   log(textString);
 
-  addChartData(measurement_count, battery0);
+  addChartData(measurement_count, avgBioz);
 
   measurement_count += 1;
   prev_seqno = seqNo;
@@ -127,7 +127,7 @@ const logDataView = (labelOfDataSource, key, valueDataView) => {
 
 window.onload =  function() {
 
-  log("v8");
+  log("v9");
 
   document.querySelector('form').addEventListener('submit', function(event) {
         event.stopPropagation();
